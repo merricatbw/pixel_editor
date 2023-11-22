@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Sacramento&display=swap');
+
+.title {
+    font-family: "Sacramento", cursive;
+    font-size: 2.5em;
+    color: #656565;
+}
+
+.shadow {
+    -webkit-box-shadow: 5px 5px 29px -9px rgba(161,161,161,1);
+    -moz-box-shadow: 5px 5px 29px -9px rgba(161,161,161,1);
+    box-shadow: 5px 5px 29px -9px rgba(161,161,161,1);
+}
+
+.rounded {
+    border-radius: 12px;
+}
+
+.container {
+    display: flex;
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+}
