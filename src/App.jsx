@@ -11,21 +11,31 @@ const App = () => {
         tiles: []
     })
 
+    // Initializing temporary array with white pixels and setting grid.tiles to the temporary array.
     useEffect(() => {
+        let tmpArray = []                           
+        for (let i = 0; i < grid.x; i++) {     
+            tmpArray.push([])
+            for (let j = 0; j < grid.y; j++) {
+                tmpArray[i].push("#FFFFFF")
+            }
+        }
         setGrid({
             ...grid,
-            tiles: Array(grid.x).fill(Array(grid.y).fill("#FFFFFF"))
+            tiles: tmpArray
         })
-        console.log("grid filled")
     }, [])
 
+    //Setting the width and the height of the canvas. 
     const [canvasWidth, setCanvasWidth] = useState(600)
     const [canvasHeight, setCanvasHeight] = useState(600)
 
+    //maps the raw pixel position to the pixel grid
     const normalizeClick = (rawPosition, canvasScaleInt, gridScaleInt) => {
         return Math.floor(rawPosition / (canvasScaleInt / gridScaleInt))
     }
 
+    //gets the click position of the click on the canvas and returns an object with the x and y coords
     const getClickLocation = (x, y) => {
         const rect = document.querySelector('canvas').getBoundingClientRect()
         const clickPosition = {
@@ -37,8 +47,13 @@ const App = () => {
     
     const placePixel = event => {
         const click = getClickLocation(event.clientX, event.clientY)
+        let updatedTiles = grid.tiles
+        updatedTiles[click.x][click.y] = "#000000"
+        setGrid({
+            ...grid, 
+            tiles: updatedTiles
+        })
         console.log(grid.tiles)
-        console.log(click)
     }
     
     return (
@@ -49,7 +64,7 @@ const App = () => {
 
                 </div>
                 <div className="container center">
-                    <PixelCanvas width={600} height={600} clickHandler={placePixel}/>
+                    <PixelCanvas width={600} height={600} clickHandler={placePixel} tiles={grid.tiles}/>
                 </div>
             </div>
         
