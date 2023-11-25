@@ -4,31 +4,53 @@ import {useState, useEffect} from 'react'
 
 
 const App = () => {
-
     const [grid, setGrid] = useState({
         x: 16,
-        y: 16,
-        tiles: []
+        y: 16
     })
 
-    // Initializing temporary array with white pixels and setting grid.tiles to the temporary array.
+    const [canvas, setCanvas] = useState({
+        width: 600, 
+        height: 600
+    })
+
+    const [tiles, setTiles] = useState({})
+
     useEffect(() => {
-        let tmpArray = []                           
-        for (let i = 0; i < grid.x; i++) {     
-            tmpArray.push([])
-            for (let j = 0; j < grid.y; j++) {
-                tmpArray[i].push("#FFFFFF")
+        let tmpObj = {}
+        for (let x = 0; x < grid.x; x++) {
+            for (let y = 0; y < grid.y; y++) {
+                tmpObj[stringifyCoords(x, y)] = makeTileObj(x, y, "#FFFFFF")
             }
         }
-        setGrid({
-            ...grid,
-            tiles: tmpArray
-        })
+        setTiles(tmpObj)
     }, [])
 
-    //Setting the width and the height of the canvas. 
-    const [canvasWidth, setCanvasWidth] = useState(600)
-    const [canvasHeight, setCanvasHeight] = useState(600)
+    const stringifyCoords = (x, y) => {
+        return `${x}.${y}`
+    }
+
+    //find the real canvas position for the start of a pixel
+    const findRealCoord = (x, canvasScaleInt, gridScaleInt) => {
+        return x * (canvasScaleInt / gridScaleInt)
+    }
+
+    const makeTileObj = (x, y, color) => {
+        const key = stringifyCoords(x, y)
+        const realCoords = {
+            x: findRealCoord(x, canvas.width, grid.x),
+            y: findRealCoord(y, canvas.height, grid.y)
+        }
+        return {
+            coords: {
+                x: x,
+                y: y,
+            },
+            realCoords: realCoords,
+            color: color
+        }
+        
+    }
 
     //maps the raw pixel position to the pixel grid
     const normalizeClick = (rawPosition, canvasScaleInt, gridScaleInt) => {
@@ -39,23 +61,17 @@ const App = () => {
     const getClickLocation = (x, y) => {
         const rect = document.querySelector('canvas').getBoundingClientRect()
         const clickPosition = {
-            x: normalizeClick(x - rect.left, canvasWidth, grid.x),
-            y: normalizeClick(y - rect.top, canvasHeight, grid.y)
+            x: normalizeClick(x - rect.left, canvas.width, grid.x),
+            y: normalizeClick(y - rect.top, canvas.height, grid.y)
         }
         return clickPosition
     }
     
     const placePixel = event => {
         const click = getClickLocation(event.clientX, event.clientY)
-        let updatedTiles = grid.tiles
-        updatedTiles[click.x][click.y] = "#000000"
-        setGrid({
-            ...grid, 
-            tiles: updatedTiles
-        })
-        console.log(grid.tiles)
+        console.log(tiles[stringifyCoords(click.x, click.y)])
     }
-    
+
     return (
         <div>
             <h1 className="title">Pixel Editor</h1>
@@ -64,7 +80,7 @@ const App = () => {
 
                 </div>
                 <div className="container center">
-                    <PixelCanvas width={600} height={600} clickHandler={placePixel} tiles={grid.tiles}/>
+                    <PixelCanvas width={canvas.width} height={canvas.height} clickHandler={placePixel}/>
                 </div>
             </div>
         

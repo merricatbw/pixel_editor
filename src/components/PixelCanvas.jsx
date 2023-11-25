@@ -1,4 +1,4 @@
-const PixelCanvas = ({ width, height, clickHandler }) => {
+const PixelCanvas = ({ width, height, clickHandler}) => {
     return (
         <div>
             <canvas id="pixel_canvas" width={width} height={height} className="shadow" onClick={clickHandler}>
