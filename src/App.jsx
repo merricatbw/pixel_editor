@@ -17,7 +17,7 @@ const App = () => {
 
     const [tiles, setTiles] = useState({})
 
-    const [selectedColor, setSelectedColor] = useState("#000000")
+    const [selectedColor, setSelectedColor] = useState("#fff6d3")
 
     const [palette, setPallete] = useState([
         "#fff6d3",
@@ -34,6 +34,12 @@ const App = () => {
             }
         }
         setTiles(tmpObj)
+    }, [])
+
+    useEffect(() => {
+        const ctx = document.querySelector('canvas').getContext("2d")
+        ctx.fillStyle = palette[0]
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
     }, [])
 
     const stringifyCoords = (x, y) => {
