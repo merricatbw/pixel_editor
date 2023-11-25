@@ -5,16 +5,18 @@ import {useState, useEffect} from 'react'
 
 const App = () => {
     const [grid, setGrid] = useState({
-        x: 16,
-        y: 16
+        x: 32,
+        y: 32
     })
 
     const [canvas, setCanvas] = useState({
-        width: 600, 
-        height: 600
+        width: 512, 
+        height: 512
     })
 
     const [tiles, setTiles] = useState({})
+
+    const [selectedColor, setSelectedColor] = useState("#000000")
 
     useEffect(() => {
         let tmpObj = {}
@@ -41,15 +43,29 @@ const App = () => {
             x: findRealCoord(x, canvas.width, grid.x),
             y: findRealCoord(y, canvas.height, grid.y)
         }
+        const dimensions = {
+            width: canvas.width / grid.x,
+            height: canvas.height / grid.y
+        }
         return {
             coords: {
                 x: x,
                 y: y,
             },
             realCoords: realCoords,
+            dimensions: dimensions,
             color: color
         }
         
+    }
+
+    const updateTile = (x, y, color) => {
+        const tile = tiles[stringifyCoords(x, y)]
+        tile.color = color
+        setTiles({
+            ...tiles,
+            [stringifyCoords(x, y)]: tile
+        })
     }
 
     //maps the raw pixel position to the pixel grid
@@ -66,10 +82,20 @@ const App = () => {
         }
         return clickPosition
     }
-    
+
+    const renderTile = (x, y) => {
+        const tile = tiles[stringifyCoords(x, y)]
+        console.log(tile)
+        const ctx = document.querySelector("canvas").getContext('2d')
+        console.log(ctx)
+        ctx.fillStyle = tile.color
+        ctx.fillRect(tile.realCoords.x, tile.realCoords.y, tile.dimensions.width, tile.dimensions.height);
+    }
+
     const placePixel = event => {
         const click = getClickLocation(event.clientX, event.clientY)
-        console.log(tiles[stringifyCoords(click.x, click.y)])
+        updateTile(click.x, click.y, selectedColor)
+        renderTile(click.x, click.y)
     }
 
     return (
