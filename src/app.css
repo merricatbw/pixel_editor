@@ -18,9 +18,22 @@
 
 .container {
     display: flex;
+    padding: 12px;
 }
 
 .center {
     align-items: center;
     justify-content: center;
+}
+
+.toolbar {
+    width: 75px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.color-box {
+    width: 24px;
+    height: 24px;
+    margin: 4px;
 }

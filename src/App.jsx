@@ -1,12 +1,13 @@
 import "./app.css"
 import PixelCanvas from "./components/PixelCanvas"
+import ColorSelector from "./components/ColorSelector"
 import {useState, useEffect} from 'react'
 
 
 const App = () => {
     const [grid, setGrid] = useState({
-        x: 32,
-        y: 32
+        x: 16,
+        y: 16
     })
 
     const [canvas, setCanvas] = useState({
@@ -17,6 +18,13 @@ const App = () => {
     const [tiles, setTiles] = useState({})
 
     const [selectedColor, setSelectedColor] = useState("#000000")
+
+    const [palette, setPallete] = useState([
+        "#fff6d3",
+        "#f9a875",
+        "#eb6b6f",
+        "#7c3f58",
+    ])
 
     useEffect(() => {
         let tmpObj = {}
@@ -85,9 +93,7 @@ const App = () => {
 
     const renderTile = (x, y) => {
         const tile = tiles[stringifyCoords(x, y)]
-        console.log(tile)
         const ctx = document.querySelector("canvas").getContext('2d')
-        console.log(ctx)
         ctx.fillStyle = tile.color
         ctx.fillRect(tile.realCoords.x, tile.realCoords.y, tile.dimensions.width, tile.dimensions.height);
     }
@@ -98,12 +104,16 @@ const App = () => {
         renderTile(click.x, click.y)
     }
 
+    const setColor = (colorHex) => {
+        setSelectedColor(colorHex)
+    }
+
     return (
         <div>
             <h1 className="title">Pixel Editor</h1>
             <div className="container ">
                 <div>
-
+                    <ColorSelector colorSelectFunc={setColor} palette={palette} selected={selectedColor} />
                 </div>
                 <div className="container center">
                     <PixelCanvas width={canvas.width} height={canvas.height} clickHandler={placePixel}/>
