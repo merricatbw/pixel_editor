@@ -1,9 +1,14 @@
 
 import ColorBox from "./ColorBox"
 
-const ColorSelector = ({palette, colorSelectFunc, selected}) => {
+const ColorSelector = ({ palette, colorSelectFunc, selected }) => {
     const renderPalette = palette.map(color => {
-        return <ColorBox key={color} colorHex={color} colorSelectFunc={colorSelectFunc} selected={color === selected} />
+        return <ColorBox
+            key={color}
+            colorHex={color}
+            colorSelectFunc={colorSelectFunc}
+            selected={color === selected}
+        />
     })
     return (
         <div className="container">

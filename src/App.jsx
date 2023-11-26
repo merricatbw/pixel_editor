@@ -111,7 +111,12 @@ const App = () => {
         const tile = tiles[stringifyCoords(x, y)]
         const ctx = pixelCanvasRef.current.getContext('2d')
         ctx.fillStyle = tile.color
-        ctx.fillRect(tile.realCoords.x, tile.realCoords.y, tile.dimensions.width, tile.dimensions.height);
+        ctx.fillRect(
+            tile.realCoords.x,
+            tile.realCoords.y,
+            tile.dimensions.width,
+            tile.dimensions.height
+        );
     }
 
     const placePixel = event => {
@@ -129,12 +134,25 @@ const App = () => {
             <h1 className="title">Pixel Editor</h1>
             <div className="container ">
                 <div>
-                    <ColorSelector colorSelectFunc={setColor} palette={palette} selected={selectedColor} />
+                    <ColorSelector
+                        colorSelectFunc={setColor}
+                        palette={palette}
+                        selected={selectedColor}
+                    />
                 </div>
                 <div className="container center">
                     <div>
-                        <PixelCanvas width={canvas.width} height={canvas.height} clickHandler={placePixel} refId={pixelCanvasRef} />
-                        <GridCanvas width={canvas.width} height={canvas.height} refId={gridCanvasRef} />
+                        <PixelCanvas
+                            width={canvas.width}
+                            height={canvas.height}
+                            clickHandler={placePixel}
+                            refId={pixelCanvasRef}
+                        />
+                        <GridCanvas
+                            width={canvas.width}
+                            height={canvas.height}
+                            refId={gridCanvasRef}
+                        />
 
                     </div>
                 </div>

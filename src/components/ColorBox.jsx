@@ -14,9 +14,11 @@ const ColorBox = ({ colorHex, colorSelectFunc, selected }) => {
         }
     }
     return (
-        <div onClick={() => colorSelectFunc(colorHex)} className="color-box rounded" style={style}>
-            
-        </div>
+        <div
+            onClick={() => colorSelectFunc(colorHex)}
+            className="color-box rounded"
+            style={style}
+        ></div>
     )
 }
 
