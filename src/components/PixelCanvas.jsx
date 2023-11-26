@@ -1,10 +1,6 @@
-const PixelCanvas = ({ width, height, clickHandler}) => {
+const PixelCanvas = ({ width, height, clickHandler, refId}) => {
     return (
-        <div>
-            <canvas id="pixel_canvas" width={width} height={height} className="shadow" onClick={clickHandler}>
-
-            </canvas>
-        </div>
+        <canvas id="pixel_canvas" width={width} height={height} className="shadow" onClick={clickHandler} ref={refId}></canvas>
     )
 }
 

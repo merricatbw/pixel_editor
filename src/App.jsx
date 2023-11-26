@@ -1,7 +1,8 @@
 import "./app.css"
 import PixelCanvas from "./components/PixelCanvas"
 import ColorSelector from "./components/ColorSelector"
-import {useState, useEffect} from 'react'
+import GridCanvas from "./components/GridCanvas"
+import { useState, useEffect, useRef } from 'react'
 
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
     })
 
     const [canvas, setCanvas] = useState({
-        width: 512, 
+        width: 512,
         height: 512
     })
 
@@ -26,6 +27,9 @@ const App = () => {
         "#7c3f58",
     ])
 
+    const pixelCanvasRef = useRef()
+    const gridCanvasRef = useRef()
+
     useEffect(() => {
         let tmpObj = {}
         for (let x = 0; x < grid.x; x++) {
@@ -37,10 +41,16 @@ const App = () => {
     }, [])
 
     useEffect(() => {
-        const ctx = document.querySelector('canvas').getContext("2d")
+        const ctx = pixelCanvasRef.current.getContext("2d")
         ctx.fillStyle = palette[0]
         ctx.fillRect(0, 0, canvas.width, canvas.height)
     }, [])
+
+    useEffect(() => {
+        const ctx = gridCanvasRef.current.getContext("2d")
+        console.log("rectangle :)")
+        ctx.fillRect(50, 50, 50, 50)
+    })
 
     const stringifyCoords = (x, y) => {
         return `${x}.${y}`
@@ -70,7 +80,7 @@ const App = () => {
             dimensions: dimensions,
             color: color
         }
-        
+
     }
 
     const updateTile = (x, y, color) => {
@@ -89,7 +99,7 @@ const App = () => {
 
     //gets the click position of the click on the canvas and returns an object with the x and y coords
     const getClickLocation = (x, y) => {
-        const rect = document.querySelector('canvas').getBoundingClientRect()
+        const rect = pixelCanvasRef.current.getBoundingClientRect()
         const clickPosition = {
             x: normalizeClick(x - rect.left, canvas.width, grid.x),
             y: normalizeClick(y - rect.top, canvas.height, grid.y)
@@ -99,7 +109,7 @@ const App = () => {
 
     const renderTile = (x, y) => {
         const tile = tiles[stringifyCoords(x, y)]
-        const ctx = document.querySelector("canvas").getContext('2d')
+        const ctx = pixelCanvasRef.current.getContext('2d')
         ctx.fillStyle = tile.color
         ctx.fillRect(tile.realCoords.x, tile.realCoords.y, tile.dimensions.width, tile.dimensions.height);
     }
@@ -122,10 +132,14 @@ const App = () => {
                     <ColorSelector colorSelectFunc={setColor} palette={palette} selected={selectedColor} />
                 </div>
                 <div className="container center">
-                    <PixelCanvas width={canvas.width} height={canvas.height} clickHandler={placePixel}/>
+                    <div>
+                        <PixelCanvas width={canvas.width} height={canvas.height} clickHandler={placePixel} refId={pixelCanvasRef} />
+                        <GridCanvas width={canvas.width} height={canvas.height} refId={gridCanvasRef} />
+
+                    </div>
                 </div>
             </div>
-        
+
         </div>
     )
 }
